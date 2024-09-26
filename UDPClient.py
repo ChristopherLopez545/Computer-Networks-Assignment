@@ -22,8 +22,11 @@ def prepMsg(sentence):
 ##### Define your processing protocol for responses here!
 def parseResponse(responseList):
     words = pickle.loads(responseList)
-    print(words) # uncomment to see what you are receiving as a response
-    sentence = ' '.join(words)
+    
+    # append each word into the linked list in correct order then put the words
+    #together with put_together() method 
+    for segment in words:
+        
     return sentence
 
 # Load a message from your text file

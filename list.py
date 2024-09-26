@@ -29,9 +29,24 @@ class linked_list:
         else: 
             new_node.next = self.head
             self.head = new_node
+            
     def print_list(self):
         current_node = self.head
         while current_node:  # Traverse through the list
             print(current_node.data, end=" -> ")
             current_node = current_node.next
-        print("None")    
+        print("None")   
+        
+    # this method is used to assemble the words in correct order 
+    def put_together(self):
+        #empty list 
+        word_list = [] 
+        curr = self.head
+        while curr: 
+            word_list.append(curr.head) # add the data at the head 
+            curr= curr.next # point to the next object 
+        
+        #return the word list into a single string 
+        return " ".join(word)
+        
+
