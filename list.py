@@ -29,13 +29,24 @@ class linked_list:
         else: 
             new_node.next = self.head
             self.head = new_node
-            
-    def print_list(self):
-        current_node = self.head
-        while current_node:  # Traverse through the list
-            print(current_node.data, end=" -> ")
-            current_node = current_node.next
-        print("None")   
+
+    def inorder_Insert(self,num,data): # num here is the sequence number 
+        #insert node into linked list 
+        new_node = node(data,num)
+        if self.head is None or self.head.number > num: # if head is null or is greater then the current 
+                                                        # sequence number 
+            new_node.next= self.head #this pushes at the front 
+            self.head = new_node
+            return
+
+        current = self.head
+        # this part finds where the current word should be inserted 
+        while current.next is not None and current.next.number < num:
+            current = current.next # traverse 
+        
+        new_node.next = current.next 
+        current.next = new_node
+
         
     # this method is used to assemble the words in correct order 
     def put_together(self):
@@ -43,10 +54,11 @@ class linked_list:
         word_list = [] 
         curr = self.head
         while curr: 
-            word_list.append(curr.head) # add the data at the head 
+           # print(curr.data)
+            word_list.append(curr.data) # add the data at the head 
             curr= curr.next # point to the next object 
         
         #return the word list into a single string 
-        return " ".join(word)
+        return " ".join(word_list)
         
 

@@ -17,16 +17,26 @@ def prepMsg(sentence):
     #assign each word with a index ex 0 cat 1 food
     for index, words in enumerate(words):
         segments.append(f"{index}:{words}")
-    return segments
+    
+    # using picke to turn this into byte like objects 
+    pickle_segments = pickle.dumps(segments) 
+    return pickle_segments
 
 ##### Define your processing protocol for responses here!
 def parseResponse(responseList):
     words = pickle.loads(responseList)
-    
+    linkedList = linked_list()
     # append each word into the linked list in correct order then put the words
-    #together with put_together() method 
+    #together with put_together() method
+    print(words) 
     for segment in words:
-        
+        if ":" in segment: # when we hit a segment with "!@#$"
+            orderNum, word = segment.split(":",1) # spliting the segment   
+                                         # ex) 0:cat , orderNum = 0 and word = cat
+            linkedList.inorder_Insert(int(orderNum),word)
+
+    # put the message back together
+    sentence = linkedList.put_together()                                 
     return sentence
 
 # Load a message from your text file
