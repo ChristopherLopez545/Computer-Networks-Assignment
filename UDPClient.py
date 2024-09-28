@@ -24,19 +24,36 @@ def prepMsg(sentence):
 
 ##### Define your processing protocol for responses here!
 def parseResponse(responseList):
+    # Load the pickled response
     words = pickle.loads(responseList)
-    linkedList = linked_list()
-    # append each word into the linked list in correct order then put the words
-    #together with put_together() method
-    print(words) 
-    for segment in words:
-        if ":" in segment: # when we hit a segment with "!@#$"
-            orderNum, word = segment.split(":",1) # spliting the segment   
-                                         # ex) 0:cat , orderNum = 0 and word = cat
-            linkedList.inorder_Insert(int(orderNum),word)
 
-    # put the message back together
-    sentence = linkedList.put_together()                                 
+    # Check if the loaded data is actually a list
+    if not isinstance(words, list):
+        raise ValueError("Expected response to be a list.")
+
+    linkedList = linked_list()  # Assuming you have a linked list implementation
+
+    # Print the received words for debugging
+    print("Received words:", words)  # Debugging line
+    
+    # Process each segment
+    for segment in words:
+        # Check if the segment is a string and contains ":"
+        if isinstance(segment, str) and ":" in segment:
+            orderNum, word = segment.split(":", 1)  # Split the segment
+
+            # Handle corrupted segments
+            if word == "!@#$":
+                linkedList.inorder_Insert(int(orderNum), None)  # Insert None for corrupted segment
+            else:
+                linkedList.inorder_Insert(int(orderNum), word)  # Insert the valid word
+
+    # Assemble the full message
+    sentence = linkedList.put_together() 
+    
+    # Debugging output to see the final constructed sentence
+    print("Constructed sentence:", sentence)
+
     return sentence
 
 # Load a message from your text file
