@@ -31,31 +31,42 @@ def parseResponse(responseList):
     if not isinstance(words, list):
         raise ValueError("Expected response to be a list.")
 
-    linkedList = linked_list()  # Assuming you have a linked list implementation
+    # Dictionary to store segments with their order numbers
+    segments_dict = {}
+    max_index = -1  # Keep track of the highest index received
 
-    # Print the received words for debugging
-    print("Received words:", words)  # Debugging line
-    
     # Process each segment
     for segment in words:
         # Check if the segment is a string and contains ":"
         if isinstance(segment, str) and ":" in segment:
             orderNum, word = segment.split(":", 1)  # Split the segment
+            orderNum = int(orderNum)
+
+            # Update the maximum index received
+            if orderNum > max_index:
+                max_index = orderNum
 
             # Handle corrupted segments
             if word == "!@#$":
-                linkedList.inorder_Insert(int(orderNum), None)  # Insert None for corrupted segment
+                segments_dict[orderNum] = "[MISSING]"  # Placeholder for corrupted segment
             else:
-                linkedList.inorder_Insert(int(orderNum), word)  # Insert the valid word
+                segments_dict[orderNum] = word  # Store the valid word
+
+    # Reassemble the message in order
+    ordered_segments = []
+    for i in range(max_index + 1):  # Reconstruct the message using max_index
+        if i in segments_dict:
+            ordered_segments.append(segments_dict[i])
+        else:
+            ordered_segments.append("[MISSING]")  # Insert placeholder for completely missing segments
 
     # Assemble the full message
-    sentence = linkedList.put_together() 
+    sentence = ' '.join(ordered_segments) 
     
     # Debugging output to see the final constructed sentence
     print("Constructed sentence:", sentence)
 
     return sentence
-
 # Load a message from your text file
 messages = []
 with open('demoMessages.txt', 'r') as f:
